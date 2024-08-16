@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="discount")
+@Table(name="inventory")
 @Data
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
