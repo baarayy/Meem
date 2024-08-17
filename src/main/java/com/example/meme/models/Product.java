@@ -29,15 +29,15 @@ public class Product extends BaseEntity{
     @Column(name = "decription" , length = 500)
     private String desc;
 
-    @Column(name="SKU", nullable=false, unique=true, length=20)
-    private String SKU;
+    @Column(name="sku", nullable=false, unique=true, length=16)
+    private String sku;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name="category_id")
     private Category category;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name="inventory_id")
     private Inventory inventory;
 
@@ -49,9 +49,14 @@ public class Product extends BaseEntity{
     @JoinColumn(name="discount_id")
     private Discount discount;
 
-    @OneToMany(mappedBy="product", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="product", cascade=CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference
     private List<OrderItem> orderItems=new ArrayList<>();
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+
+    }
 
 
 }

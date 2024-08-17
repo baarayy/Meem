@@ -1,6 +1,7 @@
 package com.example.meme.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,8 @@ public class CartItem extends BaseEntity{
     @Column(name="id")
     private Integer id;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name="session_id",nullable=false)
     private UserShoppingSession session;
 

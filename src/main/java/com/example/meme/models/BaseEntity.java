@@ -17,7 +17,7 @@ import java.time.Instant;
 @Data
 public class BaseEntity implements Serializable {
     @CreatedDate
-    @Column(name="created_at" ,nullable = false)
+    @Column(name="created_at" ,nullable = false ,updatable = false)
     @JsonIgnore
     private Instant createdAt;
 

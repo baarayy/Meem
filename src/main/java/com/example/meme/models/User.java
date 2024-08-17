@@ -25,10 +25,13 @@ public class User extends BaseEntity{
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "username")
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "username",unique = true,nullable = false)
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
 
     @Column(name="firstname")
@@ -44,9 +47,11 @@ public class User extends BaseEntity{
     @Column(name="role")
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
-
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
 }
