@@ -35,5 +35,6 @@ public class UserShoppingSession extends BaseEntity {
 
     public void removeCartItem(CartItem cartItem) {
         cartItems.remove(cartItem);
+        cartItem.setSession(null);
     }
 }

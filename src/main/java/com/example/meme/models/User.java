@@ -53,5 +53,6 @@ public class User extends BaseEntity{
 
     public void addOrder(Order order) {
         orders.add(order);
+        order.setUser(this);
     }
 }

@@ -3,7 +3,7 @@ package com.example.meme.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UserAdressDTO(
+public record UserAddressDTO(
         @NotNull
         Integer id,
         @NotNull
