@@ -2,7 +2,6 @@ package com.example.meme.service;
 
 import com.example.meme.dto.OrderItemDTO;
 import com.example.meme.exception.EntityNotFoundException;
-import com.example.meme.models.OrderItem;
 import com.example.meme.repositories.OrderItemRepo;
 import com.example.meme.repositories.OrderRepo;
 import com.example.meme.repositories.ProductRepo;
