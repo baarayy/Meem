@@ -3,10 +3,7 @@ package com.example.meme.models;
 import com.example.meme.utils.PaymentProvider;
 import com.example.meme.utils.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name="payment_detail")
@@ -14,7 +11,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class PaymentDetail extends BaseEntity{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -25,7 +21,7 @@ public class PaymentDetail extends BaseEntity{
     private Order order;
 
     @Column(name="amount",nullable=false)
-    private Double amount;
+    private final Double amount = order != null ? order.getTotal() : 0;
 
     @Enumerated(EnumType.STRING)
     @Column(name="payment_provider",nullable=false)
