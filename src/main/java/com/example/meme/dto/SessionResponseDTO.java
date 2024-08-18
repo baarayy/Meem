@@ -1,17 +1,19 @@
 package com.example.meme.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
-public record OrderDTO(
+public record SessionResponseDTO(
         @NotNull
         Integer id,
         @NotNull
         Integer userId,
-        @NotNull
-        Integer paymentDetailId,
-        List<Integer>orderItemIds
+        @Positive
+        Double total,
+        @NotEmpty
+        List<Integer> cartItemIds
 ) {
 }

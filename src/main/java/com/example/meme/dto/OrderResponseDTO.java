@@ -5,13 +5,15 @@ import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
-public record OrderDTO(
+public record OrderResponseDTO(
         @NotNull
         Integer id,
         @NotNull
         Integer userId,
+        @Positive
+        Double total,
         @NotNull
         Integer paymentDetailId,
-        List<Integer>orderItemIds
+        List<Integer> orderItemIds
 ) {
 }

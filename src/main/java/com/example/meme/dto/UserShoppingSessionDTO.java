@@ -11,8 +11,6 @@ public record UserShoppingSessionDTO(
         Integer id,
         @NotNull
         Integer userId,
-        @Positive
-        Double total,
         @NotEmpty
         List<Integer>cartItemIds
 ) {

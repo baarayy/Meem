@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface SessionRepo extends JpaRepository<UserShoppingSession,Integer> {
     Optional<UserShoppingSession> findByUserId(Integer id);
-    List<UserShoppingSession> findByTotalBetween(Double min,Double max);
     @Override
     Page<UserShoppingSession> findAll(Pageable pageable);
 }

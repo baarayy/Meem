@@ -26,7 +26,7 @@ public class UserShoppingSession extends BaseEntity {
     @JoinColumn(name="user_id")
     private User user;
 
-    @Column(name="total")
+    @Transient
     private Double total;
 
     @OneToMany(mappedBy = "session" , cascade = CascadeType.ALL,orphanRemoval = true)
@@ -36,5 +36,16 @@ public class UserShoppingSession extends BaseEntity {
     public void removeCartItem(CartItem cartItem) {
         cartItems.remove(cartItem);
         cartItem.setSession(null);
+    }
+    public void addCartItem(CartItem c){
+        cartItems.add(c);
+        c.setSession(this);
+        this.recalculateTotal();
+    }
+
+    private void recalculateTotal() {
+        this.total = cartItems.stream()
+                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .sum();
     }
 }

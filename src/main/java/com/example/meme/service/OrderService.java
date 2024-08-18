@@ -1,6 +1,7 @@
 package com.example.meme.service;
 
 import com.example.meme.dto.OrderDTO;
+import com.example.meme.dto.OrderResponseDTO;
 import com.example.meme.exception.EntityNotFoundException;
 import com.example.meme.models.Order;
 import com.example.meme.repositories.OrderItemRepo;
@@ -26,24 +27,24 @@ public class OrderService {
     private final PaymentDetailRepo paymentDetailRepo;
     private final OrderMapper mapper;
 
-    public Page<OrderDTO> findAll(int page ,int size) {
+    public Page<OrderResponseDTO> findAll(int page , int size) {
         var pageable = PageRequest.of(page , size);
         return repo.findAll(pageable).map(mapper::toDTO);
     }
 
-    public OrderDTO findById(Integer id) {
+    public OrderResponseDTO findById(Integer id) {
         return repo.findById(id).map(mapper::toDTO).orElseThrow(()->
                 new EntityNotFoundException("There is no order with id " + id));
     }
     @Transactional
-    public OrderDTO create(OrderDTO x){
+    public OrderResponseDTO create(OrderDTO x){
         var o = mapper.toEntity(x);
         var saved = repo.save(o);
         return mapper.toDTO(saved);
     }
 
     @Transactional
-    public OrderDTO update(Integer id,OrderDTO x){
+    public OrderResponseDTO update(Integer id,OrderDTO x){
         var o = repo.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Order with id: " + id + " isn't found" ));
         var list = x.orderItemIds();
@@ -62,7 +63,7 @@ public class OrderService {
         repo.findById(id).ifPresent(repo::delete);
     }
 
-    public List<OrderDTO> findOrdersByUser(Integer id){
+    public List<OrderResponseDTO> findOrdersByUser(Integer id){
         return repo.findByUserId(id).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 }
