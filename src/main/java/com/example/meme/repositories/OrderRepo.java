@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Order,Integer> {
-    List<Order>findByTotalBetween(Double min,Double max);
     List<Order>findByUserId(Integer id);
     @Override
     Page<Order> findAll(Pageable pageable);

@@ -1,9 +1,7 @@
 package com.example.meme.utils.mappers;
 
 import com.example.meme.dto.UserAddressDTO;
-import com.example.meme.models.User;
 import com.example.meme.models.UserAddress;
-import com.example.meme.repositories.AddressRepo;
 import com.example.meme.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AddressMapper {
-    private final AddressRepo repo;
     private final UserRepo userRepo;
 
     public UserAddress toEntity(UserAddressDTO x) {

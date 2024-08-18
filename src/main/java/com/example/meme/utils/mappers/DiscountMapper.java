@@ -2,7 +2,6 @@ package com.example.meme.utils.mappers;
 
 import com.example.meme.dto.DiscountDTO;
 import com.example.meme.models.Discount;
-import com.example.meme.repositories.DiscountRepo;
 import com.example.meme.repositories.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DiscountMapper {
-    private final DiscountRepo repo;
     private final ProductRepo productRepo;
 
     public Discount toEntity(DiscountDTO x){

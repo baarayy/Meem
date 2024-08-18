@@ -2,7 +2,6 @@ package com.example.meme.utils.mappers;
 
 import com.example.meme.dto.CategoryDTO;
 import com.example.meme.models.Category;
-import com.example.meme.repositories.CategoryRepo;
 import com.example.meme.repositories.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoryMapper {
-    private final CategoryRepo repo;
     private final ProductRepo productRepo;
 
     public Category toEntity(CategoryDTO x) {

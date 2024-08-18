@@ -3,7 +3,6 @@ package com.example.meme.utils.mappers;
 import com.example.meme.dto.UserShoppingSessionDTO;
 import com.example.meme.models.UserShoppingSession;
 import com.example.meme.repositories.CartItemRepo;
-import com.example.meme.repositories.SessionRepo;
 import com.example.meme.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SessionMapper {
-    private final SessionRepo repo;
     private final UserRepo urepo;
     private final CartItemRepo crepo;
 

@@ -2,8 +2,6 @@ package com.example.meme.utils.mappers;
 
 import com.example.meme.dto.CartItemDTO;
 import com.example.meme.models.CartItem;
-import com.example.meme.models.Product;
-import com.example.meme.repositories.CartItemRepo;
 import com.example.meme.repositories.ProductRepo;
 import com.example.meme.repositories.SessionRepo;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class cartItemMapper {
-    private final CartItemRepo repo;
     private final SessionRepo sessionRepo;
     private final ProductRepo productRepo;
 

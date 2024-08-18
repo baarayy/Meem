@@ -28,7 +28,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "total")
+    @Transient
     private double total;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -42,6 +42,10 @@ public class Order extends BaseEntity {
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
+        recalculateTotal();
     }
-
+    
+    public void recalculateTotal() {
+        this.total = orderItems.stream().mapToDouble(item-> item.getProduct().getPrice() * item.getQuantity()).sum();
+    }
 }

@@ -3,7 +3,6 @@ package com.example.meme.utils.mappers;
 import com.example.meme.dto.OrderDTO;
 import com.example.meme.models.Order;
 import com.example.meme.repositories.OrderItemRepo;
-import com.example.meme.repositories.OrderRepo;
 import com.example.meme.repositories.PaymentDetailRepo;
 import com.example.meme.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,20 +13,19 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderMapper {
-    private final OrderRepo repo;
     private final UserRepo userRepo;
-    private final OrderItemRepo detailRepo;
-    private final PaymentDetailRepo paymentRepo;
+    private final OrderItemRepo orderItemRepo;
+    private final PaymentDetailRepo paymentDetailRepo;
 
 
     public Order toEntity(OrderDTO x){
         var o = new Order();
-        o.setTotal(x.total());
         userRepo.findById(x.userId()).ifPresent(o::setUser);
-        paymentRepo.findById(x.paymentDetailId()).ifPresent(o::setPaymentDetail);
+        paymentDetailRepo.findById(x.paymentDetailId()).ifPresent(o::setPaymentDetail);
         var list = x.orderItemIds();
         if(list!=null){
-            o.setOrderItems(detailRepo.findAllById(list));
+            var orderItems = orderItemRepo.findAllById(list);
+            orderItems.forEach(o::addOrderItem);
         }
         return o;
     }

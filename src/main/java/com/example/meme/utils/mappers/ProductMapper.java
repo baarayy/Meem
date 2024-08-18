@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductMapper {
-    private final ProductRepo repo;
     private final CategoryRepo categoryRepo;
     private final OrderItemRepo detailRepo;
     private final DiscountRepo discountRepo;

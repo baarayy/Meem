@@ -2,7 +2,6 @@ package com.example.meme.utils.mappers;
 
 import com.example.meme.dto.OrderItemDTO;
 import com.example.meme.models.OrderItem;
-import com.example.meme.repositories.OrderItemRepo;
 import com.example.meme.repositories.OrderRepo;
 import com.example.meme.repositories.ProductRepo;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderItemMapper {
-    private final OrderItemRepo repo;
     private final ProductRepo prepo;
     private final OrderRepo orepo;
 

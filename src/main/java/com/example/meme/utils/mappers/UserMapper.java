@@ -3,14 +3,12 @@ package com.example.meme.utils.mappers;
 import com.example.meme.dto.UserDTO;
 import com.example.meme.models.User;
 import com.example.meme.repositories.OrderRepo;
-import com.example.meme.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserMapper {
-    private final UserRepo repo;
     private final OrderRepo orderRepo;
 
     public User toEntity(UserDTO x){

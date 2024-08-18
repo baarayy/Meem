@@ -2,7 +2,6 @@ package com.example.meme.utils.mappers;
 
 import com.example.meme.dto.UserPaymentDTO;
 import com.example.meme.models.UserPayment;
-import com.example.meme.repositories.UserPaymentRepo;
 import com.example.meme.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserPaymentMapper {
-    private final UserPaymentRepo repo;
     private final UserRepo userRepo;
 
 
