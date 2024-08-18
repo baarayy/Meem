@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserPaymentRepo extends JpaRepository<UserPayment,Integer> {
     List<UserPayment> findByPaymentProvider(PaymentProvider provider);
     List<UserPayment> findByPaymentType(PaymentType type);
-    List<UserPayment> findByUserId(Integer id);
+    Optional<UserPayment> findByUserId(Integer id);
     @Override
     Page<UserPayment> findAll(Pageable pageable);
 }
