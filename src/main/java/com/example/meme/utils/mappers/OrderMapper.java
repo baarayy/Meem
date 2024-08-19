@@ -4,6 +4,7 @@ import com.example.meme.dto.OrderDTO;
 import com.example.meme.dto.OrderResponseDTO;
 import com.example.meme.models.Order;
 import com.example.meme.repositories.OrderItemRepo;
+import com.example.meme.repositories.OrderRepo;
 import com.example.meme.repositories.PaymentDetailRepo;
 import com.example.meme.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderMapper {
+    private final OrderRepo repo;
     private final UserRepo userRepo;
     private final OrderItemRepo orderItemRepo;
     private final PaymentDetailRepo paymentDetailRepo;
@@ -27,6 +29,8 @@ public class OrderMapper {
         if(list!=null){
             var orderItems = orderItemRepo.findAllById(list);
             orderItems.forEach(o::addOrderItem);
+            repo.save(o);
+            orderItemRepo.saveAll(orderItems);
         }
         return o;
     }

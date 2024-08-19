@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderItemMapper {
-    private final ProductRepo prepo;
-    private final OrderRepo orepo;
+    private final ProductRepo productRepo;
+    private final OrderRepo orderRepo;
 
     public OrderItem toEntity(OrderItemDTO x){
         var o = new OrderItem();
         o.setQuantity(x.quantity());
-        prepo.findById(x.productId()).ifPresent(o::setProduct);
-        orepo.findById(x.orderId()).ifPresent(o::setOrder);
+        productRepo.findById(x.productId()).ifPresent(o::setProduct);
+        orderRepo.findById(x.orderId()).ifPresent(o::setOrder);
         return o;
     }
 
