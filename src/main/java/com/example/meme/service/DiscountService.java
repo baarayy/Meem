@@ -7,6 +7,8 @@ import com.example.meme.repositories.DiscountRepo;
 import com.example.meme.repositories.ProductRepo;
 import com.example.meme.utils.mappers.DiscountMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ public class DiscountService {
     private final DiscountRepo repo;
     private final ProductRepo productRepo;
     private final DiscountMapper mapper;
+    private Validator validator;
 
     public Page<DiscountDTO> findAll(int page ,int size) {
         return  repo.findAll(PageRequest.of(page , size)).map(mapper::toDTO);
@@ -30,6 +33,10 @@ public class DiscountService {
 
     @Transactional
     public DiscountDTO create(DiscountDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var  d = mapper.toEntity(x);
         var saved = repo.save(d);
         return mapper.toDTO(saved);
@@ -37,6 +44,10 @@ public class DiscountService {
 
     @Transactional
     public DiscountDTO update(Integer id,DiscountDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var d = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("There is no discount with id " + id));
         d.setActive(x.active());

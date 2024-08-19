@@ -6,6 +6,8 @@ import com.example.meme.repositories.*;
 import com.example.meme.utils.mappers.ProductMapper;
 import com.example.meme.utils.specification.ProductSpecification;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,6 +30,7 @@ public class ProductService {
     private final OrderItemRepo orderItemRepo;
     private final ProductSpecification specification;
     private final ProductMapper mapper;
+    private Validator validator;
 
     @Cacheable(value = "allProducts" , key="'findAll_' + #page + '_' + #size")
     public Page<ProductDTO> findAll(int page, int size){
@@ -45,6 +48,10 @@ public class ProductService {
     @Transactional
     @CacheEvict(value={"allProducts", "productById"}, allEntries=true)
     public ProductDTO create(ProductDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var product = mapper.toEntity(x);
         var savedProduct = repo.save(product);
         return  mapper.toDTO(savedProduct);
@@ -53,6 +60,10 @@ public class ProductService {
     @Transactional
     @CacheEvict(value={"allProducts", "productById"}, allEntries=true)
     public ProductDTO update(Integer id ,ProductDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var product = repo.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Product with id " + id + " is not found"));
         if(x.categoryId() != null)

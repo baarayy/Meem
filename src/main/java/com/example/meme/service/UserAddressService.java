@@ -7,6 +7,8 @@ import com.example.meme.repositories.AddressRepo;
 import com.example.meme.repositories.UserRepo;
 import com.example.meme.utils.mappers.AddressMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +20,14 @@ public class UserAddressService {
     private final AddressRepo repo;
     private final UserRepo userRepo;
     private final AddressMapper mapper;
+    private Validator validator;
 
     @Transactional
     public UserAddressDTO create(UserAddressDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var address = mapper.toEntity(x);
         var saved = repo.save(address);
         return mapper.toDTO(saved);
@@ -37,6 +44,10 @@ public class UserAddressService {
 
     @Transactional
     public UserAddressDTO update(Integer id ,UserAddressDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var address = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("There is no address with id " + id));
         address.setAddressLine1(x.addressLine1());

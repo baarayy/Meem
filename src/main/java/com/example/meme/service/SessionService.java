@@ -8,6 +8,8 @@ import com.example.meme.repositories.SessionRepo;
 import com.example.meme.repositories.UserRepo;
 import com.example.meme.utils.mappers.SessionMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ public class SessionService {
     private final CartItemRepo cartItemRepo;
     private final SessionRepo repo;
     private final SessionMapper mapper;
+    private Validator validator;
 
     public Page<SessionResponseDTO> findAll(int page ,int size) {
         var p = PageRequest.of(page ,size);
@@ -33,6 +36,10 @@ public class SessionService {
 
     @Transactional
     public SessionResponseDTO create(UserShoppingSessionDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var s = mapper.toEntity(x);
         var saved = repo.save(s);
         return mapper.toDTO(saved);
@@ -40,6 +47,10 @@ public class SessionService {
 
     @Transactional
     public SessionResponseDTO update(Integer id ,UserShoppingSessionDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var s = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("There is no user session with id " + id));
         userRepo.findById(x.userId()).ifPresent(s::setUser);

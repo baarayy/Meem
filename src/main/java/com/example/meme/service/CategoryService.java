@@ -7,6 +7,9 @@ import com.example.meme.repositories.ProductRepo;
 import com.example.meme.utils.mappers.CategoryMapper;
 import com.example.meme.utils.specification.CategorySpecification;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,11 +23,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Data
 public class CategoryService {
     private final CategoryRepo repo;
     private final ProductRepo productRepo;
     private final CategoryMapper mapper;
     private final CategorySpecification specification;
+    private Validator validator;
 
     @Cacheable(value = "allCategories" , key = "'findAll_' + #page + '_' + #size")
     public Page<CategoryDTO> findAll(int page,int size) {
@@ -41,6 +46,10 @@ public class CategoryService {
     @Transactional
     @CacheEvict(value = {"allCategories" , "categoryById"} , allEntries = true)
     public CategoryDTO create(CategoryDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var c = mapper.toEntity(x);
         var savedCategory = repo.save(c);
         return mapper.toDTO(savedCategory);
@@ -49,6 +58,10 @@ public class CategoryService {
     @Transactional
     @CacheEvict(value = {"allCategories" , "categoryById"} , allEntries = true)
     public CategoryDTO update(Integer id,CategoryDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var c = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("Category with id " + id + " is not found"));
         c.setDesc(x.desc());

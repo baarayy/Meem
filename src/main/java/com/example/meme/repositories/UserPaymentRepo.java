@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserPaymentRepo extends JpaRepository<UserPayment,Integer>, JpaSpecificationExecutor<UserPayment> {
+public interface UserPaymentRepo extends JpaRepository<UserPayment,Integer> {
     List<UserPayment> findByPaymentProvider(PaymentProvider provider);
     List<UserPayment> findByPaymentType(PaymentType type);
     Optional<UserPayment> findByUserId(Integer id);

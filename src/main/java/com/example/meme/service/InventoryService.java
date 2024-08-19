@@ -5,6 +5,8 @@ import com.example.meme.exception.EntityNotFoundException;
 import com.example.meme.repositories.InventoryRepo;
 import com.example.meme.utils.mappers.InventoryMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +17,14 @@ import org.springframework.stereotype.Service;
 public class InventoryService {
     private final InventoryRepo repo;
     private final InventoryMapper mapper;
+    private Validator validator;
 
     @Transactional
     public InventoryDTO create(InventoryDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var inventory = mapper.toEntity(x);
         var saved = repo.save(inventory);
         return mapper.toDTO(saved);
@@ -34,6 +41,10 @@ public class InventoryService {
 
     @Transactional
     public InventoryDTO update(Integer id ,InventoryDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var inventory = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("There is no inventory with id " + id));
         inventory.setQuantity(x.quantity());

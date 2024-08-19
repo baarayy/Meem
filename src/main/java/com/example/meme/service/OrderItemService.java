@@ -7,6 +7,8 @@ import com.example.meme.repositories.OrderRepo;
 import com.example.meme.repositories.ProductRepo;
 import com.example.meme.utils.mappers.OrderItemMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,7 @@ public class OrderItemService {
     private final OrderRepo orderRepo;
     private final ProductRepo productRepo;
     private final OrderItemMapper mapper;
+    private Validator validator;
 
     public OrderItemDTO findById(Integer id) {
         return repo.findById(id).map(mapper::toDTO).orElseThrow(()->
@@ -34,6 +37,10 @@ public class OrderItemService {
 
     @Transactional
     public OrderItemDTO create(OrderItemDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var o = mapper.toEntity(x);
         var saved = repo.save(o);
         return mapper.toDTO(saved);
@@ -41,6 +48,10 @@ public class OrderItemService {
 
     @Transactional
     public OrderItemDTO update(Integer id , OrderItemDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var o = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("There is no order item with id " + id));
         o.setQuantity(x.quantity());

@@ -9,6 +9,8 @@ import com.example.meme.utils.PaymentProvider;
 import com.example.meme.utils.PaymentType;
 import com.example.meme.utils.mappers.UserPaymentMapper;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,7 @@ public class UserPaymentService {
     private final UserRepo userRepo;
     private final UserPaymentRepo repo;
     private final UserPaymentMapper mapper;
+    private Validator validator;
 
     public Page<UserPaymentDTO> findAll(int page ,int size) {
         return repo.findAll(PageRequest.of(page,size)).map(mapper::toDTO);
@@ -35,6 +38,10 @@ public class UserPaymentService {
 
     @Transactional
     public UserPaymentDTO create(UserPaymentDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var p = mapper.toEntity(x);
         var saved = repo.save(p);
         return mapper.toDTO(saved);
@@ -42,6 +49,10 @@ public class UserPaymentService {
 
     @Transactional
     public UserPaymentDTO update(Integer id ,UserPaymentDTO x) {
+        var violations = validator.validate(x);
+        if(!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         var p = repo.findById(id).orElseThrow(()->
                 new EntityNotFoundException("There is no user payment with id " + id));
         p.setAccountNumber(x.accountNo());
