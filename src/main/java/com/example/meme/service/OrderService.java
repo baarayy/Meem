@@ -51,6 +51,8 @@ public class OrderService {
         if(list!=null){
             var itemList = orderItemRepo.findAllById(list);
             itemList.forEach(o::addOrderItem);
+            repo.save(o);
+            orderItemRepo.saveAll(itemList);
         }
         paymentDetailRepo.findById(x.paymentDetailId()).ifPresent(o::setPaymentDetail);
         userRepo.findById(x.userId()).ifPresent(o::setUser);
