@@ -1,6 +1,6 @@
 package com.example.meme.utils.mappers;
 
-import com.example.meme.dto.UserDTO;
+import com.example.meme.dto.UserRegistrationDTO;
 import com.example.meme.models.User;
 import com.example.meme.repositories.OrderRepo;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class UserMapper {
     private final OrderRepo orderRepo;
 
-    public User toEntity(UserDTO x){
+    public User toEntity(UserRegistrationDTO x){
         var u = new User();
         u.setEmail(x.email());
         u.setFirstname(x.firstName());

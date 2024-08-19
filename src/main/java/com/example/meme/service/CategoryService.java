@@ -50,6 +50,13 @@ public class CategoryService {
 
     @Transactional
     public void delete(Integer id) {
-        repo.findById(id).ifPresent(repo::delete);
+        var optinalCategory = repo.findById(id);
+        if(optinalCategory.isPresent()) {
+            var category = optinalCategory.get();
+            var list = category.getProducts();
+            list.forEach(category::removeProduct);
+            productRepo.saveAll(list);
+            repo.delete(category);
+        }
     }
 }

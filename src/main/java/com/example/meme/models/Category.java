@@ -31,4 +31,9 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy="category")
     @JsonManagedReference
     private List<Product> products=new ArrayList<>();
+
+    public void removeProduct(Product p) {
+        products.remove(p);
+        p.setCategory(null);
+    }
 }

@@ -9,12 +9,11 @@ import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
-public record UserDTO(
+public record UserRegistrationDTO(
         @NotNull
         Integer id,
         @NotBlank
         String username,
-        @JsonIgnore
         @Pattern(regexp= "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
                 message= "password must be at least 8 characters,"
                         + " one lowercase letter,"
