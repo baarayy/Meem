@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record ProductDTO(
-        @NotBlank
         Integer id,
         @NotBlank
         @Size(min=3,max=100,message="Product name must be between 3 and 100 characters")

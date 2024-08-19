@@ -5,7 +5,6 @@ import com.example.meme.utils.PaymentStatus;
 import jakarta.validation.constraints.NotNull;
 
 public record PaymentDetailDTO(
-        @NotNull
         Integer id,
         @NotNull
         Integer orderId,

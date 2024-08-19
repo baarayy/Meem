@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 public record OrderResponseDTO(
-        @NotNull
         Integer id,
         @NotNull
         Integer userId,

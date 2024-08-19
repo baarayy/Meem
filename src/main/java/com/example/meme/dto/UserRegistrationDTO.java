@@ -10,8 +10,6 @@ import jakarta.validation.constraints.Pattern;
 import java.util.List;
 
 public record UserRegistrationDTO(
-        @NotNull
-        Integer id,
         @NotBlank
         String username,
         @Pattern(regexp= "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",

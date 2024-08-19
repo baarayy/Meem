@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 public record SessionResponseDTO(
-        @NotNull
         Integer id,
         @NotNull
         Integer userId,

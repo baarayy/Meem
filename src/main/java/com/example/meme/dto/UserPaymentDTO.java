@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record UserPaymentDTO(
-        @NotNull
         Integer id,
         @NotNull
         Integer userId,
