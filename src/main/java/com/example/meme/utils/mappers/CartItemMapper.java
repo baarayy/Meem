@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class cartItemMapper {
+public class CartItemMapper {
     private final SessionRepo sessionRepo;
     private final ProductRepo productRepo;
 

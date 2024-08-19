@@ -7,5 +7,5 @@ public record CartItemDTO(
         @NotNull Integer id,
         @NotNull  Integer sessionId,
         @NotNull Integer productId,
-      @Positive Integer quantity) {
+        @Positive Integer quantity) {
 }
