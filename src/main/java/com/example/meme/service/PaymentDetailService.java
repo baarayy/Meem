@@ -32,6 +32,9 @@ public class PaymentDetailService {
     }
 
     public PaymentDetailResponseDTO findById(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         return repo.findById(id).map(mapper::toDTO).orElseThrow(()->
                 new EntityNotFoundException("There is no payment detail with id " + id));
     }
@@ -48,6 +51,9 @@ public class PaymentDetailService {
 
     @Transactional
     public PaymentDetailResponseDTO update(Integer id, PaymentDetailDTO x){
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
@@ -64,6 +70,9 @@ public class PaymentDetailService {
 
     @Transactional
     public void delete(Integer id){
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         repo.findById(id).ifPresent(repo::delete);
     }
 

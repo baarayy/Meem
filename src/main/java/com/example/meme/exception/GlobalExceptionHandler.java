@@ -36,4 +36,10 @@ public class GlobalExceptionHandler {
         var errorResponse = new ResourceError(HttpStatus.BAD_REQUEST.value(), errorMessage , System.currentTimeMillis());
         return new ResponseEntity<>(errorResponse , HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

@@ -30,6 +30,9 @@ public class SessionService {
     }
 
     public SessionResponseDTO findById(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         return repo.findById(id).map(mapper::toDTO).orElseThrow(()->
                 new EntityNotFoundException("There is no user session with id " + id));
     }
@@ -47,6 +50,9 @@ public class SessionService {
 
     @Transactional
     public SessionResponseDTO update(Integer id ,UserShoppingSessionDTO x) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
@@ -65,6 +71,9 @@ public class SessionService {
 
     @Transactional
     public void delete(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         repo.findById(id).ifPresent(repo::delete);
     }
 

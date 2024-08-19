@@ -27,6 +27,9 @@ public class OrderItemService {
     private Validator validator;
 
     public OrderItemDTO findById(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         return repo.findById(id).map(mapper::toDTO).orElseThrow(()->
                 new EntityNotFoundException("There is no order item with id " + id));
     }
@@ -48,6 +51,9 @@ public class OrderItemService {
 
     @Transactional
     public OrderItemDTO update(Integer id , OrderItemDTO x) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
@@ -63,6 +69,9 @@ public class OrderItemService {
 
     @Transactional
     public void delete(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         repo.findById(id).ifPresent(repo::delete);
     }
 

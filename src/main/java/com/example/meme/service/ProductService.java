@@ -40,6 +40,9 @@ public class ProductService {
 
     @Cacheable(value="productById", key="#id")
     public ProductDTO findById(Integer id){
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var opProduct = repo.findById(id);
         return opProduct.map(mapper::toDTO).orElseThrow(
                 () -> new EntityNotFoundException("There is no product with id " + id));
@@ -60,6 +63,9 @@ public class ProductService {
     @Transactional
     @CacheEvict(value={"allProducts", "productById"}, allEntries=true)
     public ProductDTO update(Integer id ,ProductDTO x) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
@@ -84,6 +90,9 @@ public class ProductService {
     @Transactional
     @CacheEvict(value={"allProducts", "productById"}, allEntries=true)
     public void delete(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         repo.findById(id).ifPresent(repo::delete);
     }
 

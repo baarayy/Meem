@@ -41,12 +41,18 @@ public class CartItemService {
     }
 
     public CartItemDTO findById(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         return repo.findById(id).map(mapper::toDTO).orElseThrow(() ->
                 new EntityNotFoundException("There is no cart item with id " + id));
     }
 
     @Transactional
     public CartItemDTO update(Integer id ,CartItemDTO x) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
@@ -62,6 +68,9 @@ public class CartItemService {
 
     @Transactional
     public void delete(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         repo.findById(id).ifPresent(repo::delete);
     }
 }

@@ -32,6 +32,9 @@ public class UserPaymentService {
     }
 
     public UserPaymentDTO findById(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         return repo.findById(id).map(mapper::toDTO).orElseThrow(()->
                 new EntityNotFoundException("There is no user payment with id " + id));
     }
@@ -49,6 +52,9 @@ public class UserPaymentService {
 
     @Transactional
     public UserPaymentDTO update(Integer id ,UserPaymentDTO x) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
@@ -66,6 +72,9 @@ public class UserPaymentService {
 
     @Transactional
     public void delete(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("Id must be positive");
+        }
         repo.findById(id).ifPresent(repo::delete);
     }
 
