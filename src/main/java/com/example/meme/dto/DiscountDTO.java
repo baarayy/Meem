@@ -14,7 +14,7 @@ public record DiscountDTO(
         String desc,
         @Positive
         double percent,
-        boolean active,
+        Boolean active,
         List<Integer> productIds
 ) {
 }

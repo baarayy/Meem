@@ -60,7 +60,7 @@ public class Product extends BaseEntity{
 
     public Double discountedPrice() {
         Double actualPrice = price == null ? 0.0 : price;
-        return (discount != null && discount.isActive()) ? actualPrice * (1 - discount.getPercent()) : actualPrice;
+        return (discount != null && discount.getActive()) ? actualPrice * (1 - discount.getPercent()) : actualPrice;
     }
 
 }
