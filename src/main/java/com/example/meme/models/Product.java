@@ -26,7 +26,7 @@ public class Product extends BaseEntity{
     @Column(name="product_name" , nullable = false , unique = true , length = 100)
     private String name;
 
-    @Column(name = "decription" , length = 500)
+    @Column(name = "description" , length = 500)
     private String desc;
 
     @Column(name="sku", nullable=false, unique=true, length=16)

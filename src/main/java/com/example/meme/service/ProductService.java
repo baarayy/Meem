@@ -32,7 +32,7 @@ public class ProductService {
     private final ProductMapper mapper;
     private Validator validator;
 
-    @Cacheable(value = "allProducts" , key="'findAll_' + #page + '_' + #size")
+    @Cacheable(value="allProducts", key = "'findAll_' + #page + '_' + #size")
     public Page<ProductDTO> findAll(int page, int size){
         var pageable = PageRequest.of(page,size);
         return repo.findAll(pageable).map(mapper::toDTO);
