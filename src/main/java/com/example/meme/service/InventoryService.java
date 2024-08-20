@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class InventoryService {
     private Validator validator;
 
     @Transactional
+    @CacheEvict(value={"allInventories", "inventoryById"}, allEntries=true)
     public InventoryDTO create(InventoryDTO x) {
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
@@ -30,10 +33,12 @@ public class InventoryService {
         return mapper.toDTO(saved);
     }
 
+    @Cacheable(value="allInventories", key = "'findAll_' + #page + '_' + #size")
     public Page<InventoryDTO> findALl(int page ,int size) {
         return repo.findAll(PageRequest.of(page , size)).map(mapper::toDTO);
     }
 
+    @Cacheable(value="orderItemById", key="#id")
     public InventoryDTO findById(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -43,6 +48,7 @@ public class InventoryService {
     }
 
     @Transactional
+    @CacheEvict(value={"allInventories", "inventoryById"}, allEntries=true)
     public InventoryDTO update(Integer id ,InventoryDTO x) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -59,10 +65,14 @@ public class InventoryService {
     }
 
     @Transactional
+    @CacheEvict(value={"allInventories", "inventoryById"}, allEntries=true)
     public void delete(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
         }
         repo.findById(id).ifPresent(repo::delete);
     }
+
+    @CacheEvict(value={"allInventories", "inventoryById"}, allEntries=true)
+    public void clearCache() {}
 }

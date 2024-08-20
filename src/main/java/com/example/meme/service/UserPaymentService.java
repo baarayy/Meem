@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -27,10 +29,12 @@ public class UserPaymentService {
     private final UserPaymentMapper mapper;
     private Validator validator;
 
+    @Cacheable(value="allUserPayments", key = "'findAll_' + #page + '_' + #size")
     public Page<UserPaymentDTO> findAll(int page ,int size) {
         return repo.findAll(PageRequest.of(page,size)).map(mapper::toDTO);
     }
 
+    @Cacheable(value="userPaymentById", key="#id")
     public UserPaymentDTO findById(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -40,6 +44,7 @@ public class UserPaymentService {
     }
 
     @Transactional
+    @CacheEvict(value={"allUserPayments", "userPaymentById"}, allEntries=true)
     public UserPaymentDTO create(UserPaymentDTO x) {
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
@@ -51,6 +56,7 @@ public class UserPaymentService {
     }
 
     @Transactional
+    @CacheEvict(value={"allUserPayments", "userPaymentById"}, allEntries=true)
     public UserPaymentDTO update(Integer id ,UserPaymentDTO x) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -71,6 +77,7 @@ public class UserPaymentService {
     }
 
     @Transactional
+    @CacheEvict(value={"allUserPayments", "userPaymentById"}, allEntries=true)
     public void delete(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -91,4 +98,7 @@ public class UserPaymentService {
     public List<UserPaymentDTO> findPaymentByProvider(PaymentProvider provider) {
         return repo.findByPaymentProvider(provider).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
+
+    @CacheEvict(value={"allUserPayments", "userPaymentById"}, allEntries=true)
+    public void clearCache() {}
 }

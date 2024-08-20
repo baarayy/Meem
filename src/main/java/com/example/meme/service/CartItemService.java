@@ -11,6 +11,8 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class CartItemService {
     private Validator validator;
 
     @Transactional
+    @CacheEvict(value={"allCartItems", "cartItemById"}, allEntries=true)
     public CartItemDTO create(CartItemDTO x) {
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
@@ -36,10 +39,12 @@ public class CartItemService {
         return mapper.toDTO(saved);
     }
 
+    @Cacheable(value="allCartItems", key = "'findAll_' + #page + '_' + #size")
     public Page<CartItemDTO> findAll(int page ,int size) {
         return repo.findAll(PageRequest.of(page , size)).map(mapper::toDTO);
     }
 
+    @Cacheable(value="cartItemById", key="#id")
     public CartItemDTO findById(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -49,6 +54,7 @@ public class CartItemService {
     }
 
     @Transactional
+    @CacheEvict(value={"allCartItems", "cartItemById"}, allEntries=true)
     public CartItemDTO update(Integer id ,CartItemDTO x) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -67,6 +73,7 @@ public class CartItemService {
     }
 
     @Transactional
+    @CacheEvict(value={"allCartItems", "cartItemById"}, allEntries=true)
     public void delete(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");

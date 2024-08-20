@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,10 +24,12 @@ public class DiscountService {
     private final DiscountMapper mapper;
     private Validator validator;
 
+    @Cacheable(value="allDiscounts", key = "'findAll_' + #page + '_' + #size")
     public Page<DiscountDTO> findAll(int page ,int size) {
         return  repo.findAll(PageRequest.of(page , size)).map(mapper::toDTO);
     }
 
+    @Cacheable(value="discountById", key="#id")
     public DiscountDTO findById(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -35,6 +39,7 @@ public class DiscountService {
     }
 
     @Transactional
+    @CacheEvict(value={"allDiscounts", "discountById"}, allEntries=true)
     public DiscountDTO create(DiscountDTO x) {
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
@@ -46,6 +51,7 @@ public class DiscountService {
     }
 
     @Transactional
+    @CacheEvict(value={"allDiscounts", "discountById"}, allEntries=true)
     public DiscountDTO update(Integer id,DiscountDTO x) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -69,6 +75,7 @@ public class DiscountService {
     }
 
     @Transactional
+    @CacheEvict(value={"allDiscounts", "discountById"}, allEntries=true)
     public void delete(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -82,4 +89,7 @@ public class DiscountService {
             repo.delete(dd);
         }
     }
+
+    @CacheEvict(value={"allDiscounts", "discountById"}, allEntries=true)
+    public void clearCache() {}
 }

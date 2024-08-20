@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class OrderItemService {
     private final OrderItemMapper mapper;
     private Validator validator;
 
+    @Cacheable(value="orderItemById", key="#id")
     public OrderItemDTO findById(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -34,11 +37,13 @@ public class OrderItemService {
                 new EntityNotFoundException("There is no order item with id " + id));
     }
 
+    @Cacheable(value="allOrderItems", key = "'findAll_' + #page + '_' + #size")
     public Page<OrderItemDTO> findAll(int page ,int size) {
         return  repo.findAll(PageRequest.of(page , size)).map(mapper::toDTO);
     }
 
     @Transactional
+    @CacheEvict(value={"allOrderItems", "orderItemById"}, allEntries=true)
     public OrderItemDTO create(OrderItemDTO x) {
         var violations = validator.validate(x);
         if(!violations.isEmpty()) {
@@ -50,6 +55,7 @@ public class OrderItemService {
     }
 
     @Transactional
+    @CacheEvict(value={"allOrderItems", "orderItemById"}, allEntries=true)
     public OrderItemDTO update(Integer id , OrderItemDTO x) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -68,6 +74,7 @@ public class OrderItemService {
     }
 
     @Transactional
+    @CacheEvict(value={"allOrderItems", "orderItemById"}, allEntries=true)
     public void delete(Integer id) {
         if(id <= 0) {
             throw new IllegalArgumentException("Id must be positive");
@@ -78,4 +85,7 @@ public class OrderItemService {
     public List<OrderItemDTO> findOrderDetailsForProduct(Integer id) {
         return repo.findByProductId(id).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
+
+    @CacheEvict(value={"allOrderItems", "orderItemById"}, allEntries=true)
+    public void clearCache() {}
 }
