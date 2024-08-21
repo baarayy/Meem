@@ -47,6 +47,9 @@ public class User extends BaseEntity{
     @Column(name="role")
     private Role role;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference
     private List<Order> orders = new ArrayList<>();

@@ -33,6 +33,6 @@ public class UserMapper {
     public UserResponseDTO toDTO(User u) {
         var list = u.getOrders().stream().map(o -> o.getId()).collect(Collectors.toList());
         return new
-            UserResponseDTO(u.getId(),u.getUsername(),u.getFirstname(),u.getLastname(),u.getEmail(),u.getPhone(),u.getRole(),list);
+            UserResponseDTO(u.getId(),u.getUsername(),u.getFirstname(),u.getLastname(),u.getEmail(),u.getPhone(),u.getRole(),u.isEnabled(),list);
     }
 }
