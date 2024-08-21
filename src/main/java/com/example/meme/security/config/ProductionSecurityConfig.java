@@ -1,5 +1,7 @@
 package com.example.meme.security.config;
 
+import com.example.meme.security.service.CustomAccessDeniedHandler;
+import com.example.meme.security.service.CustomBasicAuthEntryPoint;
 import com.example.meme.utils.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,7 +62,8 @@ public class ProductionSecurityConfig {
         http.csrf(x->x.disable());
 
         http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+        http.httpBasic(x-> x.authenticationEntryPoint(new CustomBasicAuthEntryPoint()));
+        http.exceptionHandling(x-> x.accessDeniedHandler(new CustomAccessDeniedHandler()));
 
         return http.build();
     }
