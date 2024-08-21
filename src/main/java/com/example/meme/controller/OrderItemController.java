@@ -1,10 +1,11 @@
 package com.example.meme.controller;
 
 import com.example.meme.dto.OrderItemDTO;
-import com.example.meme.dto.ProductDTO;
 import com.example.meme.exception.EntityNotFoundException;
-import com.example.meme.models.OrderItem;
 import com.example.meme.service.OrderItemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,11 @@ public class OrderItemController {
 
     private final OrderItemService service;
 
+    @Operation(summary = "Retrieve All order items", description = "Paginated Retrieval for all order items")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "List of order items is empty"),
+            @ApiResponse(responseCode = "200", description = "Successful Retrieval of order items List")
+    })
     @GetMapping
     public ResponseEntity<Page<OrderItemDTO>> findAll(
             @RequestParam(defaultValue = "0")int page,
@@ -35,6 +41,12 @@ public class OrderItemController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Get Order Item By Id", description = "Retrieve a single Order Item by Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Order Item isn't found"),
+            @ApiResponse(responseCode = "200", description = "Order Item was successfully Found"),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<OrderItemDTO> findById(@PathVariable Integer id) {
         var orderItem = service.findById(id);
@@ -47,6 +59,11 @@ public class OrderItemController {
         }
     }
 
+    @Operation(summary = "Create a new  OrderItem")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OrderItem is successfully created"),
+            @ApiResponse(responseCode = "400", description = "Client Entered a non Valid Entity Body")
+    })
     @PostMapping
     public ResponseEntity<OrderItemDTO> create(@Valid @RequestBody OrderItemDTO x) {
         var createdProduct = service.create(x);
@@ -57,6 +74,12 @@ public class OrderItemController {
         }
     }
 
+    @Operation(summary = "Update order item")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "order item isn't found"),
+            @ApiResponse(responseCode = "200", description = "order item was successfully Updated"),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id Or a Non Valid Entity Body")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<OrderItemDTO> update(@PathVariable Integer id ,@Valid @RequestBody OrderItemDTO x) {
         var updatedOrderItem = service.update(id, x);
@@ -69,6 +92,12 @@ public class OrderItemController {
         }
     }
 
+    @Operation(summary = "Delete order item By Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "order item isn't found"),
+            @ApiResponse(responseCode = "204", description = "order item was successfully Deleted"),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         try{
@@ -81,6 +110,13 @@ public class OrderItemController {
         }
     }
 
+    @Operation(summary="Find Order Item Details With Product ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Order item isn't found"),
+            @ApiResponse(responseCode = "200", description = "Order item was successfully found"),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id"),
+            @ApiResponse(responseCode = "404", description = "Order could not be found"),
+    })
     @GetMapping("/product/{id}")
     public ResponseEntity<List<OrderItemDTO>> findOrderDetailsWithProductId(@PathVariable Integer id){
         var list = service.findOrderDetailsForProduct(id);
