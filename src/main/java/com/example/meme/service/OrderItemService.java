@@ -83,6 +83,9 @@ public class OrderItemService {
     }
 
     public List<OrderItemDTO> findOrderDetailsForProduct(Integer id) {
+        if(id <= 0) {
+            throw new IllegalArgumentException("id must be positive");
+        }
         return repo.findByProductId(id).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
