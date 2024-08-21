@@ -38,7 +38,7 @@ public class CategoryController {
         var createdCategory = service.create(x);
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
-        }catch(ConstraintViolationException e){
+        } catch(ConstraintViolationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -48,9 +48,9 @@ public class CategoryController {
         var updatedCategory = service.update(id, x);
         try{
             return ResponseEntity.status(HttpStatus.OK).body(updatedCategory);
-        }catch(IllegalArgumentException | ConstraintViolationException e){
+        } catch(IllegalArgumentException | ConstraintViolationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }catch(EntityNotFoundException e){
+        } catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }

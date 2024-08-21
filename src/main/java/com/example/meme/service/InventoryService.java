@@ -34,7 +34,7 @@ public class InventoryService {
     }
 
     @Cacheable(value="allInventories", key = "'findAll_' + #page + '_' + #size")
-    public Page<InventoryDTO> findALl(int page ,int size) {
+    public Page<InventoryDTO> findAll(int page ,int size) {
         return repo.findAll(PageRequest.of(page , size)).map(mapper::toDTO);
     }
 

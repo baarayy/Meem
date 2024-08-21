@@ -85,7 +85,7 @@ public class SessionService {
         repo.findById(id).ifPresent(repo::delete);
     }
 
-    public SessionResponseDTO getSessionByUserId(Integer id) {
+    public SessionResponseDTO findSessionByUserId(Integer id) {
         return repo.findByUserId(id).map(mapper::toDTO).orElseThrow(()->
                 new EntityNotFoundException("There is no user session with user id " + id));
     }
