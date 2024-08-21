@@ -96,7 +96,7 @@ public class ProductService {
         repo.findById(id).ifPresent(repo::delete);
     }
 
-    public List<ProductDTO> findProductWithCategoryId(Integer id) {
+    public List<ProductDTO> findProductsWithCategoryId(Integer id) {
         return repo.findByCategoryId(id).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Validated
 @RequestMapping("/api/products")
@@ -43,7 +45,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> create(@Valid ProductDTO x) {
+    public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO x) {
         var createdProduct = service.create(x);
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
@@ -53,7 +55,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Integer id ,@Valid ProductDTO x) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Integer id ,@Valid @RequestBody ProductDTO x) {
         var updatedProduct = service.update(id, x);
         try{
             return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
@@ -72,6 +74,21 @@ public class ProductController {
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }catch(EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<ProductDTO>> findProductsWithCategoryId(@PathVariable Integer id){
+        var list = service.findProductsWithCategoryId(id);
+        try{
+            if(list.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        } catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
