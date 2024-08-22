@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class UserAuthenticationController {
     }
 
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Register a new  Admin")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Admin is successfully Registered"),

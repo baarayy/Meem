@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> findById(@PathVariable Integer id) {
         var product = service.findById(id);
         try {
@@ -60,6 +62,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new  Product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product is successfully created"),
@@ -75,6 +78,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update Product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Product isn't found"),
@@ -93,6 +97,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete Product By Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Product isn't found"),
@@ -111,6 +116,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get Products For Specific Category", description = "Retrieve a single product by category Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "No Products were found"),

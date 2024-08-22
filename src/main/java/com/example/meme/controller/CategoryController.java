@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,7 @@ public class CategoryController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary="Get Category By Id", description="Retrieve a single Category by Id")
     @ApiResponses(value={
             @ApiResponse(responseCode = "404", description = "Category cannot be found"),
@@ -59,7 +61,7 @@ public class CategoryController {
         }
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary="Create a new  Category")
     @ApiResponses(value={
             @ApiResponse(responseCode = "201", description = "Category is successfully created"),
@@ -75,6 +77,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary="Update category")
     @ApiResponses(value={
             @ApiResponse(responseCode = "404", description = "category cannot be found"),
@@ -93,6 +96,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category By Id")
     @ApiResponses(value={
