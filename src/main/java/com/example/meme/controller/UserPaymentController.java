@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
 public class UserPaymentController {
 
     private final UserPaymentService service;

@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:8080")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
 public class OrderController {
 
     private final OrderService service;

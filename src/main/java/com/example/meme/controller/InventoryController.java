@@ -24,7 +24,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:8080")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
 public class InventoryController {
 
     private final InventoryService service;

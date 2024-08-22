@@ -25,7 +25,7 @@ import java.util.List;
 @Validated
 @CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
 public class PaymentDetailController {
 
     private final PaymentDetailService service;

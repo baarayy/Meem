@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/invalidSession" , "/expiredSession").permitAll()
                 .requestMatchers(HttpMethod.GET , "/api/products").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/categories").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/categories/search").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/search").permitAll()
                 .anyRequest().authenticated()

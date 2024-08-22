@@ -96,7 +96,7 @@ public class CategoryController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category By Id")
     @ApiResponses(value={

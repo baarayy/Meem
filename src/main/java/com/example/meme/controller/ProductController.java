@@ -50,7 +50,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
     public ResponseEntity<ProductDTO> findById(@PathVariable Integer id) {
         var product = service.findById(id);
         try {
@@ -62,7 +62,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
     @Operation(summary = "Create a new  Product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product is successfully created"),
@@ -78,7 +78,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
     @Operation(summary = "Update Product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Product isn't found"),
@@ -97,7 +97,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
     @Operation(summary = "Delete Product By Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Product isn't found"),

@@ -40,7 +40,7 @@ public class UserAuthenticationController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     @Operation(summary = "Register a new  Admin")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Admin is successfully Registered"),

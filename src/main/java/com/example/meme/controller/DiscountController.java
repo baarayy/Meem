@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/discounts")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:8080")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERADMIN','ADMIN')")
 public class DiscountController {
     private final DiscountService service;
 
