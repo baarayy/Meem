@@ -1,6 +1,8 @@
 package com.example.meme.security.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,11 +16,16 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Component
-@RequiredArgsConstructor
 @Profile("!production")
 public class UserUsernamePasswordAuthProvider implements AuthenticationProvider {
     private final UserDetailsService service;
     private final PasswordEncoder encoder;
+
+    @Autowired
+    public UserUsernamePasswordAuthProvider(UserDetailsService service, @Lazy PasswordEncoder encoder) {
+        this.service = service;
+        this.encoder = encoder;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

@@ -7,17 +7,25 @@ import com.example.meme.repositories.OrderRepo;
 import com.example.meme.repositories.RoleRepo;
 import com.example.meme.utils.RoleEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserMapper {
     private final OrderRepo orderRepo;
     private final PasswordEncoder encoder;
     private final RoleRepo repo;
+
+    @Autowired
+    public UserMapper(OrderRepo orderRepo, @Lazy PasswordEncoder encoder,RoleRepo repo) {
+        this.orderRepo = orderRepo;
+        this.encoder = encoder;
+        this.repo = repo;
+    }
 
     public User toEntity(UserRegistrationRequestDTO x){
         var role = repo.findByName(RoleEnum.USER);
