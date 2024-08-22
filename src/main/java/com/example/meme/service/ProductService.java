@@ -8,6 +8,7 @@ import com.example.meme.utils.specification.ProductSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Data
 public class ProductService {
     private final ProductRepo repo;
     private final CategoryRepo categoryRepo;
