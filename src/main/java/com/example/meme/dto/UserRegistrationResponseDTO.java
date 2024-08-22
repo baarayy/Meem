@@ -1,10 +1,11 @@
 package com.example.meme.dto;
 
-import com.example.meme.utils.Role;
+import com.example.meme.models.Role;
+import com.example.meme.utils.RoleEnum;
 
 import java.util.List;
 
-public record UserResponseDTO(
+public record UserRegistrationResponseDTO(
         Integer id,
         String username,
         String firstname,
@@ -12,7 +13,6 @@ public record UserResponseDTO(
         String email,
         String phone,
         Role role,
-        boolean enabled,
         List<Integer>orderIds
 ) {
 }

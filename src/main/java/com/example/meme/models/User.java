@@ -1,14 +1,11 @@
 package com.example.meme.models;
 
-import com.example.meme.utils.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Normalized;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +40,11 @@ public class User extends BaseEntity{
     @Column(name="phone")
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="role")
+
+    @JoinColumn(name = "role")
+    @OneToOne
     private Role role;
 
-    @Column(name = "enabled")
-    private boolean enabled;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference

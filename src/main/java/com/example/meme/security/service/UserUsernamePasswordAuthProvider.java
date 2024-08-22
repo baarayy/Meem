@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 @Profile("!production")
@@ -22,13 +24,8 @@ public class UserUsernamePasswordAuthProvider implements AuthenticationProvider 
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         var username = authentication.getName();
         var password = authentication.getCredentials().toString();
-        System.out.println("**********************************");
-        System.out.println(password);
 
         var user = service.loadUserByUsername(username);
-        System.out.println(user.getPassword());
-        System.out.println("**********************************");
-
         if(encoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
         } else {

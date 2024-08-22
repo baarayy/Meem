@@ -1,13 +1,14 @@
 package com.example.meme.dto;
 
-import com.example.meme.utils.Role;
+import com.example.meme.utils.RoleEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
-public record UserRegistrationDTO(
+public record UserRegistrationRequestDTO(
         @NotBlank
         String username,
         @Pattern(regexp= "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
@@ -22,10 +23,9 @@ public record UserRegistrationDTO(
         @NotBlank
         String lastName,
         @Email(message = "Email should be valid")
+        @NotNull
         String email,
-        @Pattern(regexp="^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$")
         String phone,
-        Role role,
         List<Integer> orderIds
 ) {
 }

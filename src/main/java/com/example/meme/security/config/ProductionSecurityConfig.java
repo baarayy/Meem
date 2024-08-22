@@ -2,7 +2,7 @@ package com.example.meme.security.config;
 
 import com.example.meme.security.service.CustomAccessDeniedHandler;
 import com.example.meme.security.service.CustomBasicAuthEntryPoint;
-import com.example.meme.utils.Role;
+import com.example.meme.utils.RoleEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -45,17 +45,18 @@ public class ProductionSecurityConfig {
                 .requestMatchers("/invalidSession", "/expiredSession").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
-                .requestMatchers("/api/products").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/categories").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/orders").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/discounts").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/cartitems").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/inventories").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/orderitems").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/addresses").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/payment_details").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/sessions").hasAnyRole(Role.ADMIN.name())
-                .requestMatchers("/api/user_payments").hasAnyRole(Role.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .requestMatchers("/api/products").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/categories").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/orders").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/discounts").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/cartitems").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/inventories").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/orderitems").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/addresses").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/payment_details").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/sessions").hasAnyRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/api/user_payments").hasAnyRole(RoleEnum.ADMIN.name())
                 .anyRequest().authenticated()
         );
 
