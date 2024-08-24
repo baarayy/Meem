@@ -15,3 +15,26 @@ Meem is a robust ecommerce API built using Spring Boot. It provides a set of RES
 - **Lombok**: Reduces boilerplate code by generating getters, setters, and other methods.
 - **RestClient & RestTemplate**: Facilitates interaction with external RESTful services.
 
+ ## Features
+
+- **Role-Based Access Control (RBAC)**: Manage permissions and access levels based on user roles, ensuring secure and organized control over resources.
+
+- **Session Management**: Handle user sessions efficiently, allowing for secure and scalable authentication across the application.
+
+- **Entrypoint Customization**: Customize API entry points to match specific business needs and enhance usability.
+
+- **Profiling**: Monitor and analyze application performance to identify bottlenecks and optimize resource usage.
+
+- **JPA Auditing**: Track and log entity changes automatically for better data integrity and traceability.
+
+- **Pagination, Filtering, Searching, and Sorting**: Improve API usability and performance by providing flexible data retrieval options.
+
+- **REST API Best Practices**: Follow industry standards for building robust, scalable, and maintainable RESTful APIs.
+
+- **Comprehensive Exception Handling**: Ensure consistent and informative error responses, improving the client experience and debugging process.
+
+- **Detailed Swagger Documentation**: Auto-generate detailed API documentation, allowing developers to explore and test endpoints with ease.
+
+- **Unit Testing**: Implement unit tests to ensure code reliability and prevent regressions during development.
+
+
