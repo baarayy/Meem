@@ -3,8 +3,11 @@ package com.example.meme.controller;
 import com.example.meme.dto.SessionResponseDTO;
 import com.example.meme.dto.UserShoppingSessionDTO;
 import com.example.meme.exception.EntityNotFoundException;
+import com.example.meme.pageDTOs.SessionResponseDTOPage;
 import com.example.meme.service.SessionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolationException;
@@ -31,8 +34,11 @@ public class SessionController {
 
     @Operation(summary = "Retrieve All user shopping sessions", description = "Paginated Retrieval for all user shopping sessions")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "List of user shopping sessions is empty"),
-            @ApiResponse(responseCode = "200", description = "Successful Retrieval of user shopping sessions List")
+            @ApiResponse(responseCode = "204", description = "List of user shopping sessions is empty", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Successful Retrieval of user shopping sessions List", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = SessionResponseDTOPage.class)) }),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping
     public ResponseEntity<Page<SessionResponseDTO>> findAll(
@@ -46,71 +52,59 @@ public class SessionController {
 
     @Operation(summary = "Get shopping session By Id", description = "Retrieve a single shopping session by Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "shopping session isn't found"),
-            @ApiResponse(responseCode = "200", description = "shopping session was successfully Found"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
+            @ApiResponse(responseCode = "404", description = "Shopping session isn't found", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Shopping session was successfully Found", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = SessionResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<SessionResponseDTO> findById(@PathVariable Integer id) {
         var session = service.findById(id);
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(session);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(session);
     }
 
     @Operation(summary = "Create a new  User Shopping Session")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User Shopping Session is successfully created"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a non Valid Entity Body")
+            @ApiResponse(responseCode = "201", description = "User Shopping Session is successfully created", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = SessionResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Client Entered a non Valid Entity Body", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PostMapping
     public ResponseEntity<SessionResponseDTO> create(@Valid @RequestBody UserShoppingSessionDTO x) {
         var createdSession = service.create(x);
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
-        } catch (ConstraintViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSession);
     }
 
     @Operation(summary = "Update shopping session")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "shopping session isn't found"),
-            @ApiResponse(responseCode = "200", description = "shopping session was successfully Updated"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id Or a Non Valid Entity Body")
+            @ApiResponse(responseCode = "404", description = "shopping session isn't found", content = @Content),
+            @ApiResponse(responseCode = "200", description = "shopping session was successfully Updated", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = SessionResponseDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id Or a Non Valid Entity Body",content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PutMapping("/{id}")
     public ResponseEntity<SessionResponseDTO> update(@PathVariable Integer id ,@Valid @RequestBody UserShoppingSessionDTO x) {
         var updatedSession = service.update(id, x);
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(updatedSession);
-        } catch(IllegalArgumentException | ConstraintViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(updatedSession);
     }
 
     @Operation(summary = "Delete shopping session By Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "shopping session isn't found"),
-            @ApiResponse(responseCode = "204", description = "shopping session was successfully Deleted"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
+            @ApiResponse(responseCode = "404", description = "shopping session isn't found", content = @Content),
+            @ApiResponse(responseCode = "204", description = "shopping session was successfully Deleted", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
-        try{
-            service.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Get Shopping Session By User Id", description = "Retrieve a single shopping session by user Id")
@@ -121,13 +115,7 @@ public class SessionController {
     })
     @GetMapping("/user/{id}")
     public ResponseEntity<SessionResponseDTO> findSessionByUserId(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(service.findSessionByUserId(id));
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(service.findSessionByUserId(id));
     }
 
 
