@@ -35,7 +35,8 @@ public class UserAddressController {
             @ApiResponse(responseCode = "200", description = "Successful Retrieval of user addresses List",content = {
                     @Content(mediaType = "application/json",
                     schema = @Schema(implementation = UserAddressDTOPage.class))
-            })
+            }),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping
     public ResponseEntity<Page<UserAddressDTO>> findAll(
@@ -50,71 +51,60 @@ public class UserAddressController {
 
     @Operation(summary = "Get User Address By Id", description = "Retrieve a single User Address by Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "User Address isn't found"),
-            @ApiResponse(responseCode = "200", description = "User Address was successfully Found"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
+            @ApiResponse(responseCode = "404", description = "User Address isn't found",content = @Content),
+            @ApiResponse(responseCode = "200", description = "User Address was successfully Found", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserAddressDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id",content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<UserAddressDTO> findById(@PathVariable Integer id){
         var userAddress = service.findById(id);
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(userAddress);
-        } catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userAddress);
     }
 
     @Operation(summary = "Create a new  User Address")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User Address is successfully created"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a non Valid Entity Body")
+            @ApiResponse(responseCode = "201", description = "User Address is successfully created", content = { @
+                    Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserAddressDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Client Entered a non Valid Entity Body",content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PostMapping
     public ResponseEntity<UserAddressDTO> create(@Valid @RequestBody  UserAddressDTO x){
         var createdProduct = service.create(x);
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
-        } catch(ConstraintViolationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @Operation(summary = "Update User Address")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "User Address isn't found"),
-            @ApiResponse(responseCode = "200", description = "User Address was successfully Updated"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id Or a Non Valid Entity Body")
+            @ApiResponse(responseCode = "404", description = "User Address isn't found",content = @Content),
+            @ApiResponse(responseCode = "200", description = "User Address was successfully Updated", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserAddressDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id Or a Non Valid Entity Body" , content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
     })
     @PutMapping("/{id}")
     public ResponseEntity<UserAddressDTO> update(@PathVariable Integer id, @Valid @RequestBody  UserAddressDTO x){
         var updatedUserAddress = service.update(id, x);
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(updatedUserAddress);
-        } catch(IllegalArgumentException | ConstraintViolationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUserAddress);
     }
 
     @Operation(summary = "Delete User Address By Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "User Address isn't found"),
-            @ApiResponse(responseCode = "204", description = "User Address was successfully Deleted"),
-            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id")
+            @ApiResponse(responseCode = "404", description = "User Address isn't found",content = @Content),
+            @ApiResponse(responseCode = "204", description = "User Address was successfully Deleted",content = @Content),
+            @ApiResponse(responseCode = "400", description = "Client Entered a Negative id",content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
-        try{
-            service.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Get User Address By User Id", description = "Retrieve a single User Address by user id")
@@ -125,12 +115,6 @@ public class UserAddressController {
     })
     @GetMapping("/user/{id}")
     public ResponseEntity<UserAddressDTO> findAddressByUser(@PathVariable Integer id){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(service.findAddressByUserId(id));
-        } catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch(EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAddressByUserId(id));
     }
 }
