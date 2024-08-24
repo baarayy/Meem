@@ -12,6 +12,7 @@ import com.example.meme.utils.mappers.OrderMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Data
 public class OrderService {
     private final OrderRepo repo;
     private final UserRepo userRepo;
