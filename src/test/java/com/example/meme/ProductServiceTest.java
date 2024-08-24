@@ -1,6 +1,7 @@
 package com.example.meme;
 
 import com.example.meme.dto.ProductDTO;
+import com.example.meme.utils.specification.ProductSpecification;
 import com.example.meme.exception.EntityNotFoundException;
 import com.example.meme.models.Inventory;
 import com.example.meme.models.Product;
@@ -14,6 +15,7 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.springframework.data.jpa.domain.Specification;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -41,6 +43,7 @@ public class ProductServiceTest {
     private OrderItemRepo orderItemRepo;
     @Mock
     private ProductMapper mapper;
+
     @InjectMocks
     private ProductService service;
 
@@ -90,7 +93,7 @@ public class ProductServiceTest {
         when(mapper.toEntity(x)).thenReturn(p);
         when(repo.save(p)).thenReturn(p);
         when(mapper.toDTO(p)).thenReturn(x);
-        assertEquals(x , service.update(1 , x));
+        assertEquals(x , service.create(x));
         verify(repo,times(1)).save(p);
     }
 
